@@ -1,0 +1,26 @@
+.gallery-image {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+.gallery-item a {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  margin-bottom: 30px;
+}
+.gallery-item:hover {
+  cursor: pointer;
+  opacity: 0.8;
+}
+
+#previewImage {
+  max-width: 40rem;
+  max-height: 40rem;
+  display: block;
+  margin: auto;
+}
+
+#post-btn-after {
+  display: none;
+}

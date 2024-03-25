@@ -1,0 +1,4 @@
+*.env
+*vender
+*storage
+*cron_execution_log.txt
