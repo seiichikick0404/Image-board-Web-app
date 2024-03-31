@@ -1,16 +1,16 @@
 <div class="container">
     <!-- 投稿用フォーム -->
     <div class="form-container">
-        <form>
+        <form action="#" method="post" id="upload-post-form">
             <div class="mb-3">
-                <input type="text" class="form-control" id="title" placeholder="タイトル">
+                <input type="text" class="form-control" name="subject" id="title" placeholder="タイトル">
             </div>
             <div class="mb-3">
-                <textarea class="form-control" id="content" rows="3" placeholder="内容"></textarea>
+                <textarea class="form-control" id="content" name="content" rows="3" placeholder="内容"></textarea>
             </div>
             <div class="mb-3">
                 <label for="formFile" class="form-label">画像添付</label>
-                <input class="form-control" type="file" id="formFile">
+                <input class="form-control" name="image" type="file" id="formFile">
             </div>
             <div class="d-flex justify-content-end">
                 <button type="submit" class="btn btn-primary">投稿する</button>
@@ -38,5 +38,7 @@
     </div>
     <!-- 他の匿名のツイートアイテム -->
 </div>
+
+<script src="../../public/js/app.js"></script>
 
 

@@ -71,4 +71,54 @@ class ValidationHelper
 
         return $validatedData;
     }
+
+    public static function saveRequest(?string $subject, ?string $content, $image): array
+    {
+        $validated = [
+            'success' => true,
+            'errors' => [
+                'subject' => [],
+                'content' => [],
+                'image' => [],
+            ],
+        ];
+
+        // タイトルのnullチェックと文字数制限チェック
+        if (empty($subject)) {
+            array_push($validated['errors']['subject'], "タイトルを入力してください。");
+            $validated['success'] = false;
+        } elseif (mb_strlen($subject) > 255) {
+            array_push($validated['errors']['subject'], "タイトルは255文字以内で入力してください。");
+            $validated['success'] = false;
+        }
+
+        // 内容のnullチェックと文字数制限チェック
+        if (empty($content)) {
+            array_push($validated['errors']['content'], "内容を入力してください。");
+            $validated['success'] = false;
+        } elseif (mb_strlen($content) > 1000) {
+            array_push($validated['errors']['content'], "内容は1000文字以内で入力してください。");
+            $validated['success'] = false;
+        }
+
+        // 画像の添付有無、容量制限チェック（3MB以下),  拡張子チェック
+        if (empty($image['name'])) {
+            array_push($validated['errors']['image'], "画像を添付してください。");
+            $validated['success'] = false;
+        } elseif ($image['size'] > 3145728) {
+            array_push($validated['errors']['image'], "画像ファイルのサイズは3MB以下にしてください。");
+            $validated['success'] = false;
+        } else {
+            // 拡張子チェック
+            $extension = strtolower(pathinfo($image['name'], PATHINFO_EXTENSION));
+            $allowedExtensions = ['jpeg', 'jpg', 'png', 'gif'];
+            if (!in_array($extension, $allowedExtensions)) {
+                array_push($validated['errors']['image'], "許可されていないファイル形式です。JPEG、PNG、GIFのみが許可されています。");
+                $validated['success'] = false;
+            }
+        }
+
+
+        return $validated;
+    }
 }
