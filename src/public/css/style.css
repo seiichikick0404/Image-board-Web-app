@@ -1,26 +1,39 @@
-.gallery-image {
-  max-width: 100%;
-  height: auto;
-  display: block;
+body {
+  background-color: #f5f8fa;
 }
-.gallery-item a {
-  display: block;
-  text-decoration: none;
-  color: inherit;
-  margin-bottom: 30px;
+.container {
+  padding-top: 20px;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
 }
-.gallery-item:hover {
-  cursor: pointer;
-  opacity: 0.8;
+.form-container,
+.tweet-item {
+  background-color: #ffffff;
+  border: 1px solid #e1e8ed;
+  border-radius: 10px;
+  max-width: 600px;
+  width: 100%;
+  margin-bottom: 20px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgb(0 0 0 / 10%);
+  margin-bottom: 50px; /* ここの値を増やす */
 }
-
-#previewImage {
-  max-width: 40rem;
-  max-height: 40rem;
-  display: block;
-  margin: auto;
+.tweet-item {
+  margin-bottom: 10px;
 }
-
-#post-btn-after {
-  display: none;
+.tweet-body img {
+  max-width: 100%; /* 画像が枠内に収まるように */
+  border-radius: 15px;
+  margin-top: 10px;
+}
+.tweet-title {
+  /* タイトルのスタイルを追加 */
+  margin-bottom: 10px;
+}
+.tweet-footer {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
 }

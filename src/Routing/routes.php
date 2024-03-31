@@ -11,6 +11,9 @@ use Types\ValueType;
 
 
 return [
+    'posts/library' => function(): HTTPRenderer{
+        return new HTMLRenderer('component/library', ['items'=>""]);
+    },
     'random/part'=>function(): HTTPRenderer{
         $partDao = new ComputerPartDAOImpl();
         $part = $partDao->getRandom();
@@ -20,6 +23,8 @@ return [
         return new HTMLRenderer('component/computer-part-card', ['part'=>$part]);
     },
     'parts'=>function(): HTTPRenderer{
+        var_dump('partsです');
+        exit;
         // IDの検証
         $id = ValidationHelper::integer($_GET['id']??null);
 
