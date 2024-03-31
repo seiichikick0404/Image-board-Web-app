@@ -1,26 +1,105 @@
-.gallery-image {
+body {
+  background-color: #f5f8fa;
+}
+.container {
+  padding-top: 20px;
+  padding-bottom: 100px; /* フォームの高さに合わせて調整する */
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+}
+.form-container,
+.tweet-item {
+  background-color: #ffffff;
+  border: 1px solid #e1e8ed;
+  border-radius: 10px;
+  max-width: 600px;
+  width: 100%;
+  margin-bottom: 20px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgb(0 0 0 / 10%);
+  margin-bottom: 50px;
+}
+.tweet-item {
+  margin-bottom: 10px;
+}
+.tweet-body img {
   max-width: 100%;
-  height: auto;
-  display: block;
+  border-radius: 15px;
+  margin-top: 10px;
 }
-.gallery-item a {
-  display: block;
-  text-decoration: none;
-  color: inherit;
-  margin-bottom: 30px;
+.tweet-title {
+  margin-bottom: 10px;
 }
-.gallery-item:hover {
-  cursor: pointer;
-  opacity: 0.8;
+.tweet-footer {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
 }
 
-#previewImage {
-  max-width: 40rem;
-  max-height: 40rem;
-  display: block;
-  margin: auto;
+.post-container,
+.reply-container {
+  max-width: 600px; /* 横幅を600pxに統一 */
+  width: 100%;
+  margin-bottom: 50px;
+  padding: 20px;
+  background-color: #ffffff;
+  border: 1px solid #e1e8ed;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgb(0 0 0 / 10%);
+  position: relative; /* 追加: 相対位置指定 */
 }
 
-#post-btn-after {
-  display: none;
+/* 返信スレッドのコンテナを追加 */
+.replies-container {
+  padding-left: 60px; /* 線とコンテンツの間にスペースを設ける */
+}
+
+/* 返信の線を描画する */
+.thread-line {
+  position: absolute;
+  top: -52px; /* メインスレッドの下部からスタート */
+  bottom: 731px; /* フォームの上部まで */
+  left: 40px; /* メインスレッドと返信コンテナ間に配置 */
+  width: 2px;
+  background-color: #ccc;
+  z-index: 1; /* 線が他の要素の下に表示されるようにする */
+}
+
+.post-title,
+.reply-title {
+  margin-bottom: 15px;
+}
+.post-date,
+.reply-date {
+  font-size: 0.85em;
+  color: #657786;
+  margin-bottom: 15px;
+}
+.post-content,
+.reply-content {
+  margin-bottom: 15px;
+}
+.post-image,
+.reply-image {
+  max-width: 100%;
+  border-radius: 15px;
+  margin-bottom: 15px;
+}
+.reply-form {
+  position: fixed; /* フォームを固定位置にする */
+  bottom: 0; /* 画面の下部に配置 */
+  left: 0; /* 左からの位置 */
+  right: 0; /* 右からの位置 */
+  width: 100%; /* 幅は100%に設定して画面いっぱいに広げる */
+  background-color: #ffffff; /* 背景色を白に設定 */
+  z-index: 1000; /* 他の要素の上に表示する */
+  padding: 10px; /* 内側の余白 */
+  box-shadow: 0 -2px 4px rgb(0 0 0 / 10%); /* 上側に影をつける */
+}
+
+/* textareaの高さを小さくする */
+.reply-form textarea {
+  height: 38px; /* Bootstrapのinputフォームと同じ高さに合わせる */
 }
