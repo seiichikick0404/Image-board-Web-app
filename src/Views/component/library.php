@@ -1,12 +1,3 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>フィード一覧</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/css/bootstrap.min.css">
-</head>
-<body>
 <div class="container">
     <!-- 投稿用フォーム -->
     <div class="form-container">
@@ -30,19 +21,22 @@
     <!-- 匿名のツイートアイテム -->
     <div class="tweet-item mb-5">
         <a href="path/to/detail-page.html" class="text-decoration-none text-dark">
-            <div class="tweet-body">
-                <h5 class="tweet-title">サンプルタイトル</h5> <!-- タイトルを表示 -->
-                <p>ここにツイートのテキストが表示されます。これはサンプルテキストです。</p>
-                <img src="../../public/images/sample.jpeg" alt="Tweet Image">
-            </div>
-            <div class="tweet-footer">
-                <i class="far fa-comment"> コメント</i>
-                <i class="far fa-share-square"> シェア</i>
-            </div>
+            <h5 class="tweet-title">サンプルタイトル</h5> <!-- タイトルを表示 -->
+            <p>ここにツイートのテキストが表示されます。これはサンプルテキストです。</p>
         </a>
+
+        <a href="../../public/images/sample.jpeg" target="_blank">
+            <img src="../../public/images/sample.jpeg" alt="Tweet Image" class="img-fluid">
+        </a>
+
+        <div class="tweet-footer">
+            <a href="path/to/detail-page.html" class="text-decoration-none text-dark">
+                <i class="far fa-comment"> コメント</i>
+            </a>
+            <i class="far fa-share-square"> シェア</i>
+        </div>
     </div>
     <!-- 他の匿名のツイートアイテム -->
 </div>
 
-</body>
-</html>
+
