@@ -1,13 +1,17 @@
 <?php
 session_start();
+date_default_timezone_set('Asia/Tokyo');
 
 use Helpers\ValidationHelper;
 use Models\ComputerPart;
 use Response\HTTPRenderer;
 use Response\Render\HTMLRenderer;
 use Database\DataAccess\Implementations\ComputerPartDAOImpl;
+use Database\DataAccess\Implementations\PostDAOImpl;
+use Models\Post;
 use Response\Render\JSONRenderer;
 use Types\ValueType;
+use Models\DataTimeStamp;
 
 
 return [
@@ -18,26 +22,51 @@ return [
         $postId = ValidationHelper::integer($_GET['id']??null);
         return new HTMLRenderer('component/show', ['item'=>""]);
     },
-    'random/part'=>function(): HTTPRenderer{
-        $partDao = new ComputerPartDAOImpl();
-        $part = $partDao->getRandom();
+    'form/save/post' => function(): JSONRenderer {
+        try {
+            if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+                throw new Exception('Invalid request method!');
+            }
 
-        if($part === null) throw new Exception('No parts are available!');
+            $subject = isset($_POST['subject']) ? $_POST['subject'] : null;
+            $content = isset($_POST['content']) ? $_POST['content'] : null;
+            $image = isset($_FILES['image']) ? $_FILES['image'] : null;
 
-        return new HTMLRenderer('component/computer-part-card', ['part'=>$part]);
-    },
-    'parts'=>function(): HTTPRenderer{
-        var_dump('partsです');
-        exit;
-        // IDの検証
-        $id = ValidationHelper::integer($_GET['id']??null);
+            $validated = ValidationHelper::saveRequest($subject, $content, $image);
 
-        $partDao = new ComputerPartDAOImpl();
-        $part = $partDao->getById($id);
+            if ($validated['success']) {
+                $currentDateTime = date('Y-m-d H:i:s');
+                $timeStamp = new DataTimeStamp($currentDateTime, $currentDateTime);
+                // テスト用の画像パス
+                $imagePath = "1a/gaergregrgrg.png";
 
-        if($part === null) throw new Exception('Specified part was not found!');
+                // 保存するPostオブジェクトの生成
+                $post = new Post(
+                    content: $content,
+                    subject: $subject,
+                    imagePath: $imagePath,
+                    timeStamp: $timeStamp 
+                );
 
-        return new HTMLRenderer('component/computer-part-card', ['part'=>$part]);
+                $postDao = new PostDaoImpl();
+                $postDao->create($post);
+                $createdPostData = $postDao->getById($post->getId());
+
+                $validated['data'] = $createdPostData;
+            }
+
+            return new JSONRenderer(['response' => $validated]);
+
+        } catch(\Exception $e) {
+            $errorResponse = [
+                'success' => false,
+                'errors' => [
+                    'server' => $e->getMessage()
+                ]
+            ];
+            return new JSONRenderer(['response' => $errorResponse]);
+        }
+
     },
     'update/part' => function(): HTMLRenderer {
         $part = null;

@@ -1,31 +1,26 @@
 document.addEventListener("DOMContentLoaded", function () {
-  // フォームを選択します
-  const form = document.getElementById("update-part-form");
+  const form = document.getElementById("upload-post-form");
 
   form.addEventListener("submit", function (event) {
-    // デフォルトのフォーム送信を防止します
     event.preventDefault();
 
-    // FormDataオブジェクトを作成し、コンストラクタにフォームを渡してすべての入力値を取得します
     const formData = new FormData(form);
 
-    // fetchリクエストを送信します
-    fetch("/form/update/part", {
+    fetch("/form/save/post", {
       method: "POST",
       body: formData,
     })
-      .then((response) => response.json()) // レスポンスからJSONを解析します
+      .then((response) => response.json())
       .then((data) => {
         // サーバからのレスポンスデータを処理します
-        if (data.status === "success") {
+        if (data.response.success) {
           // 成功メッセージを表示したり、リダイレクトしたり、コンソールにログを出力する可能性があります
-          console.log(data.message);
+          console.log(data);
           alert("Update successful!");
           if (!formData.has("id")) form.reset();
-        } else if (data.status === "error") {
-          // ユーザーにエラーメッセージを表示します
-          console.error(data.message);
-          alert("Update failed: " + data.message);
+        } else {
+          // エラーが返却された場合
+          console.error("Server Error:", data.response.errors);
         }
       })
       .catch((error) => {

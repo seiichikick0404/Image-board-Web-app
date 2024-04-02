@@ -104,7 +104,7 @@ class PostDAOImpl implements PostDAO
     {
         // Postモデルのインスタンス生成
         return new Post(
-            id: $data['id'],
+            id: $data['post_id'],
             replyToId: $data['reply_to_id'],
             subject: $data['subject'],
             content: $data['content'],

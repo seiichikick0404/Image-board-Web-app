@@ -9,10 +9,10 @@ class Post implements Model {
     use GenericModel;
 
     public function __construct(
+        private string $content,
         private ?int $id = null,
         private ?int $replyToId = null,
         private ?string $subject = null,
-        private string $content,
         private ?string $imagePath = null,
         private ?DataTimeStamp $timeStamp = null,
     ) {}
