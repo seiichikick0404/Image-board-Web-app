@@ -13,7 +13,11 @@
                 <input class="form-control" name="image" type="file" id="formFile">
             </div>
             <div class="d-flex justify-content-end">
-                <button type="submit" class="btn btn-primary">投稿する</button>
+                <button type="submit" class="btn btn-primary" id="submit-btn">投稿する</button>
+                <button class="btn btn-primary" type="button" id="loading-btn" disabled style="display: none;">
+                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                    投稿中...
+                </button>
             </div>
         </form>
     </div>
