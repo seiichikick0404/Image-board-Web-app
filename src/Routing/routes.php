@@ -1,43 +1,90 @@
 <?php
 session_start();
+date_default_timezone_set('Asia/Tokyo');
 
 use Helpers\ValidationHelper;
+use Helpers\ImageHelper;
 use Models\ComputerPart;
 use Response\HTTPRenderer;
 use Response\Render\HTMLRenderer;
 use Database\DataAccess\Implementations\ComputerPartDAOImpl;
+use Database\DataAccess\Implementations\PostDAOImpl;
+use Models\Post;
 use Response\Render\JSONRenderer;
 use Types\ValueType;
+use Models\DataTimeStamp;
 
 
 return [
     'posts/library' => function(): HTTPRenderer{
-        return new HTMLRenderer('component/library', ['items'=>""]);
+        $postDao = new PostDAOImpl();
+        $offset = 0;
+        $limit = 15;
+        $posts = $postDao->getAll($offset, $limit);
+        return new HTMLRenderer('component/library', ['posts' => $posts]);
     },
     'posts/show' => function(): HTTPRenderer {
         $postId = ValidationHelper::integer($_GET['id']??null);
         return new HTMLRenderer('component/show', ['item'=>""]);
     },
-    'random/part'=>function(): HTTPRenderer{
-        $partDao = new ComputerPartDAOImpl();
-        $part = $partDao->getRandom();
+    'form/save/post' => function(): JSONRenderer {
+        try {
+            if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+                throw new Exception('Invalid request method!');
+            }
 
-        if($part === null) throw new Exception('No parts are available!');
+            $subject = isset($_POST['subject']) ? $_POST['subject'] : null;
+            $content = isset($_POST['content']) ? $_POST['content'] : null;
+            $image = isset($_FILES['image']) ? $_FILES['image'] : null;
 
-        return new HTMLRenderer('component/computer-part-card', ['part'=>$part]);
-    },
-    'parts'=>function(): HTTPRenderer{
-        var_dump('partsです');
-        exit;
-        // IDの検証
-        $id = ValidationHelper::integer($_GET['id']??null);
+            $validated = ValidationHelper::saveRequest($subject, $content, $image);
 
-        $partDao = new ComputerPartDAOImpl();
-        $part = $partDao->getById($id);
+            if ($validated['success']) {
+                $currentDateTime = date('Y-m-d H:i:s');
+                $timeStamp = new DataTimeStamp($currentDateTime, $currentDateTime);
 
-        if($part === null) throw new Exception('Specified part was not found!');
+                // 画像の保存処理
+                $imageHelper = new ImageHelper();
+                $imagePath = $imageHelper->saveImageFile($image);
 
-        return new HTMLRenderer('component/computer-part-card', ['part'=>$part]);
+                if ($imagePath === "") throw new Exception('Failed to save image file');
+
+                // 保存するPostオブジェクトの生成
+                $post = new Post(
+                    content: $content,
+                    subject: $subject,
+                    imagePath: $imagePath,
+                    timeStamp: $timeStamp
+                );
+
+                $postDao = new PostDaoImpl();
+                $postDao->create($post);
+                $createdPostData = $postDao->getById($post->getId());
+                $timeStamp = $createdPostData->getTimeStamp();
+
+                $validated['result'] = [
+                    'post_id' => $createdPostData->getId(),
+                    'reply_to_id' => $createdPostData->getReplyToId(),
+                    'subject' => $createdPostData->getSubject(),
+                    'content' => $createdPostData->getContent(),
+                    'image_path' => $createdPostData->getImagePath(),
+                    'created_at' => $timeStamp->getCreatedAt(),
+                    'updated_at' => $timeStamp->getUpdatedAt(),
+                ];
+            }
+
+            return new JSONRenderer(['response' => $validated]);
+
+        } catch(\Exception $e) {
+            $errorResponse = [
+                'success' => false,
+                'errors' => [
+                    'server' => $e->getMessage()
+                ]
+            ];
+            return new JSONRenderer(['response' => $errorResponse]);
+        }
+
     },
     'update/part' => function(): HTMLRenderer {
         $part = null;
@@ -114,20 +161,5 @@ return [
             }
         }
         return new HTMLRenderer('component/notice',['message'=>$message]);
-    },'parts/all' => function(): HTMLRenderer {
-        $partDao = new ComputerPartDAOImpl();
-        $result = $partDao->getAll(0, 15);
-
-        return new HTMLRenderer('component/computer-part-list',['result'=>$result]);
-    },'parts/type'=>function(): HTTPRenderer{
-        $partDao = new ComputerPartDAOImpl();
-        if(isset($_GET['type'])){
-            $type = ValidationHelper::string($_GET['type']);
-            $result = $partDao->getAllByType($type, 0, 15);
-        }
-
-        if($result === null) throw new Exception('No parts are available!');
-
-        return new HTMLRenderer('component/computer-part-list', ['result'=>$result]);
     },
 ];

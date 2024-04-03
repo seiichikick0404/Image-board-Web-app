@@ -1,48 +1,57 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>フィード一覧</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/css/bootstrap.min.css">
-</head>
-<body>
 <div class="container">
     <!-- 投稿用フォーム -->
     <div class="form-container">
-        <form>
+        <form action="#" method="post" id="upload-post-form">
             <div class="mb-3">
-                <input type="text" class="form-control" id="title" placeholder="タイトル">
+                <input type="text" class="form-control" name="subject" id="title" placeholder="タイトル">
+                <div id="error-subject" class="form-text text-danger"></div>
             </div>
             <div class="mb-3">
-                <textarea class="form-control" id="content" rows="3" placeholder="内容"></textarea>
+                <textarea class="form-control" id="content" name="content" rows="3" placeholder="内容"></textarea>
+                <div id="error-content" class="form-text text-danger"></div>
             </div>
             <div class="mb-3">
                 <label for="formFile" class="form-label">画像添付</label>
-                <input class="form-control" type="file" id="formFile">
+                <input class="form-control" name="image" type="file" id="formFile">
+                <div id="error-image" class="form-text text-danger"></div>
             </div>
             <div class="d-flex justify-content-end">
-                <button type="submit" class="btn btn-primary">投稿する</button>
+                <button type="submit" class="btn btn-primary" id="submit-btn">投稿する</button>
+                <button class="btn btn-primary" type="button" id="loading-btn" disabled style="display: none;">
+                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                    投稿中...
+                </button>
             </div>
         </form>
     </div>
 
-    <!-- 匿名のツイートアイテム -->
-    <div class="tweet-item mb-5">
-        <a href="path/to/detail-page.html" class="text-decoration-none text-dark">
-            <div class="tweet-body">
-                <h5 class="tweet-title">サンプルタイトル</h5> <!-- タイトルを表示 -->
-                <p>ここにツイートのテキストが表示されます。これはサンプルテキストです。</p>
-                <img src="../../public/images/sample.jpeg" alt="Tweet Image">
-            </div>
+    <!-- 投稿 -->
+    <?php foreach ($posts as $post): ?>
+        
+        <div class="tweet-item mb-5">
+            <a href="show?id=<?php echo(htmlspecialchars($post->getId())) ?>" class="text-decoration-none text-dark">
+                <div class="tweet-header d-flex align-items-center justify-content-between mb-3">
+                    <h5 class="tweet-title mb-0"><?php echo(htmlspecialchars($post->getSubject())) ?></h5>
+                    <span class="tweet-date ms-2"><?php echo(htmlspecialchars($post->getTimestamp()->getCreatedAt())) ?></span>
+                </div>
+
+                <p><?php echo(htmlspecialchars($post->getContent())) ?></p>
+            </a>
+
+            <a href="../../public/storage/<?php echo(htmlspecialchars($post->getImagePath())) ?>" target="_blank">
+                <img src="../../public/storage/<?php echo(htmlspecialchars($post->getImagePath())) ?>" alt="Tweet Image" class="img-fluid">
+            </a>
+
             <div class="tweet-footer">
-                <i class="far fa-comment"> コメント</i>
+                <a href="path/to/detail-page.html" class="text-decoration-none text-dark">
+                    <i class="far fa-comment"> コメント</i>
+                </a>
                 <i class="far fa-share-square"> シェア</i>
             </div>
-        </a>
-    </div>
-    <!-- 他の匿名のツイートアイテム -->
+        </div>
+    <?php endforeach; ?>
 </div>
 
-</body>
-</html>
+<script src="../../public/js/app.js"></script>
+
+
