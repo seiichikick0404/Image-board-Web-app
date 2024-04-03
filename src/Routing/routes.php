@@ -3,6 +3,7 @@ session_start();
 date_default_timezone_set('Asia/Tokyo');
 
 use Helpers\ValidationHelper;
+use Helpers\ImageHelper;
 use Models\ComputerPart;
 use Response\HTTPRenderer;
 use Response\Render\HTMLRenderer;
@@ -37,15 +38,19 @@ return [
             if ($validated['success']) {
                 $currentDateTime = date('Y-m-d H:i:s');
                 $timeStamp = new DataTimeStamp($currentDateTime, $currentDateTime);
-                // テスト用の画像パス
-                $imagePath = "1a/gaergregrgrg.png";
+
+                // 画像の保存処理
+                $imageHelper = new ImageHelper();
+                $imagePath = $imageHelper->saveImageFile($image);
+
+                if ($imagePath === "") throw new Exception('Failed to save image file');
 
                 // 保存するPostオブジェクトの生成
                 $post = new Post(
                     content: $content,
                     subject: $subject,
                     imagePath: $imagePath,
-                    timeStamp: $timeStamp 
+                    timeStamp: $timeStamp
                 );
 
                 $postDao = new PostDaoImpl();
