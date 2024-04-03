@@ -25,15 +25,16 @@
         </form>
     </div>
 
-    <!-- 匿名のツイートアイテム -->
-    <div class="tweet-item mb-5">
-        <a href="path/to/detail-page.html" class="text-decoration-none text-dark">
-            <h5 class="tweet-title">サンプルタイトル</h5> <!-- タイトルを表示 -->
-            <p>ここにツイートのテキストが表示されます。これはサンプルテキストです。</p>
+    <!-- 投稿 -->
+    <?php foreach ($posts as $post): ?>
+        <div class="tweet-item mb-5">
+        <a href="#" class="text-decoration-none text-dark">
+            <h5 class="tweet-title"><?php echo(htmlspecialchars($post->getSubject())) ?></h5> <!-- タイトルを表示 -->
+            <p><?php echo(htmlspecialchars($post->getContent())) ?></p>
         </a>
 
-        <a href="../../public/images/sample.jpeg" target="_blank">
-            <img src="../../public/images/sample.jpeg" alt="Tweet Image" class="img-fluid">
+        <a href="../../public/storage/<?php echo(htmlspecialchars($post->getImagePath())) ?>" target="_blank">
+            <img src="../../public/storage/<?php echo(htmlspecialchars($post->getImagePath())) ?>" alt="Tweet Image" class="img-fluid">
         </a>
 
         <div class="tweet-footer">
@@ -43,7 +44,7 @@
             <i class="far fa-share-square"> シェア</i>
         </div>
     </div>
-    <!-- 他の匿名のツイートアイテム -->
+    <?php endforeach; ?>
 </div>
 
 <script src="../../public/js/app.js"></script>

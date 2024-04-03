@@ -51,7 +51,7 @@ class PostDAOImpl implements PostDAO
     {
         $mysqli = DatabaseManager::getMysqliConnection();
 
-        $query = "SELECT * FROM posts LIMIT ?, ?";
+        $query = "SELECT * FROM posts ORDER BY created_at DESC LIMIT ?, ?";
 
         $results = $mysqli->prepareAndFetchAll($query, 'ii', [$offset, $limit]);
 

@@ -17,7 +17,11 @@ use Models\DataTimeStamp;
 
 return [
     'posts/library' => function(): HTTPRenderer{
-        return new HTMLRenderer('component/library', ['items'=>""]);
+        $postDao = new PostDAOImpl();
+        $offset = 0;
+        $limit = 15;
+        $posts = $postDao->getAll($offset, $limit);
+        return new HTMLRenderer('component/library', ['posts' => $posts]);
     },
     'posts/show' => function(): HTTPRenderer {
         $postId = ValidationHelper::integer($_GET['id']??null);
@@ -157,20 +161,5 @@ return [
             }
         }
         return new HTMLRenderer('component/notice',['message'=>$message]);
-    },'parts/all' => function(): HTMLRenderer {
-        $partDao = new ComputerPartDAOImpl();
-        $result = $partDao->getAll(0, 15);
-
-        return new HTMLRenderer('component/computer-part-list',['result'=>$result]);
-    },'parts/type'=>function(): HTTPRenderer{
-        $partDao = new ComputerPartDAOImpl();
-        if(isset($_GET['type'])){
-            $type = ValidationHelper::string($_GET['type']);
-            $result = $partDao->getAllByType($type, 0, 15);
-        }
-
-        if($result === null) throw new Exception('No parts are available!');
-
-        return new HTMLRenderer('component/computer-part-list', ['result'=>$result]);
     },
 ];
