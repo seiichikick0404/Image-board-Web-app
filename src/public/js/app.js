@@ -67,6 +67,14 @@ function insertNewTweetItem(data) {
 
   // formContainer の次の要素として新しいツイートアイテムを挿入
   formContainer.insertAdjacentHTML("afterend", newTweetHtml);
+
+  // すべてのツイートアイテムを取得
+  const tweetItems = document.querySelectorAll(".tweet-item");
+
+  // ツイートアイテムが15件を超える場合、末尾のアイテムを削除
+  if (tweetItems.length > 15) {
+    tweetItems[tweetItems.length - 1].remove();
+  }
 }
 
 function displayErrors(data) {
