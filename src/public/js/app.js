@@ -22,6 +22,8 @@ document.addEventListener("DOMContentLoaded", function () {
           // サーバからのレスポンスデータを処理します
           if (data.response.success) {
             console.log(data);
+            // todo: 取得したデータを挿入する
+            insertNewTweetItem(data.response.result);
             if (!formData.has("id")) form.reset();
           } else {
             // エラーが返却された場合
@@ -40,3 +42,28 @@ document.addEventListener("DOMContentLoaded", function () {
     }, 1000);
   });
 });
+
+function insertNewTweetItem(data) {
+  const newTweetHtml = `
+    <div class="tweet-item mb-5">
+        <a href="path/to/detail-page.html" class="text-decoration-none text-dark">
+            <h5 class="tweet-title">${data.subject}</h5>
+            <p>${data.content}</p>
+        </a>
+        <a href="../../public/storage/${data.image_path}" target="_blank">
+            <img src="../../public/storage/${data.image_path}" alt="New Tweet Image" class="img-fluid">
+        </a>
+        <div class="tweet-footer">
+            <a href="path/to/detail-page.html" class="text-decoration-none text-dark">
+                <i class="far fa-comment"> コメント</i>
+            </a>
+            <i class="far fa-share-square"> シェア</i>
+        </div>
+    </div>`;
+
+  // 投稿用フォームの要素を取得
+  const formContainer = document.querySelector(".form-container");
+
+  // formContainer の次の要素として新しいツイートアイテムを挿入
+  formContainer.insertAdjacentHTML("afterend", newTweetHtml);
+}

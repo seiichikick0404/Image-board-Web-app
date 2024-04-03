@@ -56,8 +56,17 @@ return [
                 $postDao = new PostDaoImpl();
                 $postDao->create($post);
                 $createdPostData = $postDao->getById($post->getId());
+                $timeStamp = $createdPostData->getTimeStamp();
 
-                $validated['data'] = $createdPostData;
+                $validated['result'] = [
+                    'post_id' => $createdPostData->getId(),
+                    'reply_to_id' => $createdPostData->getReplyToId(),
+                    'subject' => $createdPostData->getSubject(),
+                    'content' => $createdPostData->getContent(),
+                    'image_path' => $createdPostData->getImagePath(),
+                    'created_at' => $timeStamp->getCreatedAt(),
+                    'updated_at' => $timeStamp->getUpdatedAt(),
+                ];
             }
 
             return new JSONRenderer(['response' => $validated]);
