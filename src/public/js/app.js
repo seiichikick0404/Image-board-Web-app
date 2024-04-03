@@ -47,8 +47,11 @@ document.addEventListener("DOMContentLoaded", function () {
 function insertNewTweetItem(data) {
   const newTweetHtml = `
     <div class="tweet-item mb-5">
-        <a href="path/to/detail-page.html" class="text-decoration-none text-dark">
-            <h5 class="tweet-title">${data.subject}</h5>
+        <a href="show?id=${data.post_id}" class="text-decoration-none text-dark">
+            <div class="tweet-header d-flex align-items-center justify-content-between mb-3">
+                <h5 class="tweet-title mb-0">${data.subject}</h5>
+                <span class="tweet-date ms-2">${data.created_at}</span>
+            </div>
             <p>${data.content}</p>
         </a>
         <a href="../../public/storage/${data.image_path}" target="_blank">

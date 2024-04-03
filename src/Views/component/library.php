@@ -27,23 +27,28 @@
 
     <!-- 投稿 -->
     <?php foreach ($posts as $post): ?>
+        
         <div class="tweet-item mb-5">
-        <a href="#" class="text-decoration-none text-dark">
-            <h5 class="tweet-title"><?php echo(htmlspecialchars($post->getSubject())) ?></h5> <!-- タイトルを表示 -->
-            <p><?php echo(htmlspecialchars($post->getContent())) ?></p>
-        </a>
+            <a href="show?id=<?php echo(htmlspecialchars($post->getId())) ?>" class="text-decoration-none text-dark">
+                <div class="tweet-header d-flex align-items-center justify-content-between mb-3">
+                    <h5 class="tweet-title mb-0"><?php echo(htmlspecialchars($post->getSubject())) ?></h5>
+                    <span class="tweet-date ms-2"><?php echo(htmlspecialchars($post->getTimestamp()->getCreatedAt())) ?></span>
+                </div>
 
-        <a href="../../public/storage/<?php echo(htmlspecialchars($post->getImagePath())) ?>" target="_blank">
-            <img src="../../public/storage/<?php echo(htmlspecialchars($post->getImagePath())) ?>" alt="Tweet Image" class="img-fluid">
-        </a>
-
-        <div class="tweet-footer">
-            <a href="path/to/detail-page.html" class="text-decoration-none text-dark">
-                <i class="far fa-comment"> コメント</i>
+                <p><?php echo(htmlspecialchars($post->getContent())) ?></p>
             </a>
-            <i class="far fa-share-square"> シェア</i>
+
+            <a href="../../public/storage/<?php echo(htmlspecialchars($post->getImagePath())) ?>" target="_blank">
+                <img src="../../public/storage/<?php echo(htmlspecialchars($post->getImagePath())) ?>" alt="Tweet Image" class="img-fluid">
+            </a>
+
+            <div class="tweet-footer">
+                <a href="path/to/detail-page.html" class="text-decoration-none text-dark">
+                    <i class="far fa-comment"> コメント</i>
+                </a>
+                <i class="far fa-share-square"> シェア</i>
+            </div>
         </div>
-    </div>
     <?php endforeach; ?>
 </div>
 
