@@ -4,13 +4,16 @@
         <form action="#" method="post" id="upload-post-form">
             <div class="mb-3">
                 <input type="text" class="form-control" name="subject" id="title" placeholder="タイトル">
+                <div id="error-subject" class="form-text text-danger"></div>
             </div>
             <div class="mb-3">
                 <textarea class="form-control" id="content" name="content" rows="3" placeholder="内容"></textarea>
+                <div id="error-content" class="form-text text-danger"></div>
             </div>
             <div class="mb-3">
                 <label for="formFile" class="form-label">画像添付</label>
                 <input class="form-control" name="image" type="file" id="formFile">
+                <div id="error-image" class="form-text text-danger"></div>
             </div>
             <div class="d-flex justify-content-end">
                 <button type="submit" class="btn btn-primary" id="submit-btn">投稿する</button>

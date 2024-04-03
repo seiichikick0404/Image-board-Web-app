@@ -27,6 +27,7 @@ document.addEventListener("DOMContentLoaded", function () {
             if (!formData.has("id")) form.reset();
           } else {
             // エラーが返却された場合
+            displayErrors(data);
             console.error("Server Error:", data.response.errors);
           }
         })
@@ -66,4 +67,25 @@ function insertNewTweetItem(data) {
 
   // formContainer の次の要素として新しいツイートアイテムを挿入
   formContainer.insertAdjacentHTML("afterend", newTweetHtml);
+}
+
+function displayErrors(data) {
+  // 既存のエラーメッセージをクリア
+  document.getElementById("error-subject").textContent = "";
+  document.getElementById("error-content").textContent = "";
+  document.getElementById("error-image").textContent = "";
+
+  // エラーメッセージを表示
+  if (data.response.errors.subject) {
+    document.getElementById("error-subject").textContent =
+      data.response.errors.subject.join(", ");
+  }
+  if (data.response.errors.content) {
+    document.getElementById("error-content").textContent =
+      data.response.errors.content.join(", ");
+  }
+  if (data.response.errors.image) {
+    document.getElementById("error-image").textContent =
+      data.response.errors.image.join(", ");
+  }
 }
