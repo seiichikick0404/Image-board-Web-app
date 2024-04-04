@@ -121,4 +121,52 @@ class ValidationHelper
 
         return $validated;
     }
+
+    public static function saveRequestByReply(?string $content, $image, ?int $replyToId): array
+    {
+        $validated = [
+            'success' => true,
+            'hasImage' => false,
+            'errors' => [
+                'content' => [],
+                'image' => [],
+                'reply_to_id' => [],
+            ],
+        ];
+
+        // 内容のnullチェックと文字数制限チェック
+        if (empty($content)) {
+            array_push($validated['errors']['content'], "内容を入力してください。");
+            $validated['success'] = false;
+        } elseif (mb_strlen($content) > 1000) {
+            array_push($validated['errors']['content'], "内容は1000文字以内で入力してください。");
+            $validated['success'] = false;
+        }
+
+        // 画像が提供された場合のみ、サイズと拡張子のチェックを行う
+        if (!empty($image['name'])) {
+            $validated['hasImage'] = true;
+            if ($image['size'] > 3145728) { // 3MB
+                array_push($validated['errors']['image'], "画像ファイルのサイズは3MB以下にしてください。");
+                $validated['success'] = false;
+            } else {
+                // 拡張子チェック
+                $extension = strtolower(pathinfo($image['name'], PATHINFO_EXTENSION));
+                $allowedExtensions = ['jpeg', 'jpg', 'png', 'gif'];
+                if (!in_array($extension, $allowedExtensions)) {
+                    array_push($validated['errors']['image'], "許可されていないファイル形式です。JPEG、PNG、GIFのみが許可されています。");
+                    $validated['success'] = false;
+                }
+            }
+        }
+
+        // リプライIDの方チェック
+        if ($replyToId === null) {
+            array_push($validated['errors']['reply_to_id'], "投稿IDが存在しません");
+            $validated['success'] = false;
+        }
+
+
+        return $validated;
+    }
 }

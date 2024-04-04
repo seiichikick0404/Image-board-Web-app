@@ -19,4 +19,12 @@ interface PostDAO {
      */
     public function getAll(int $offset, int $limit): array;
 
+    /**
+     * @param int $offset
+     * @param int $limit
+     * @param int $replyToId
+     * @return Post[]
+     */
+    public function getAllByReply(int $offset, int $limit, int $replyToId): array;
+
 }

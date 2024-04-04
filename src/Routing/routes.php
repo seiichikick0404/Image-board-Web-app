@@ -25,7 +25,17 @@ return [
     },
     'posts/show' => function(): HTTPRenderer {
         $postId = ValidationHelper::integer($_GET['id']??null);
-        return new HTMLRenderer('component/show', ['item'=>""]);
+        $postDao = new PostDAOImpl();
+        $post = $postDao->getById($postId);
+
+        // リプライ取得
+        $offset = 0;
+        $limit = 10;
+        $replies = $postDao->getAllByReply($offset, $limit, $post->getId());
+
+        $post->setReplyToId($postId);
+
+        return new HTMLRenderer('component/show', ['post' => $post, 'replies' => $replies]);
     },
     'form/save/post' => function(): JSONRenderer {
         try {
@@ -84,16 +94,67 @@ return [
             ];
             return new JSONRenderer(['response' => $errorResponse]);
         }
-
     },
-    'update/part' => function(): HTMLRenderer {
-        $part = null;
-        $partDao = new ComputerPartDAOImpl();
-        if(isset($_GET['id'])){
-            $id = ValidationHelper::integer($_GET['id']);
-            $part = $partDao->getById($id);
+    'form/save/reply' => function(): JSONRenderer {
+        try {
+            if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+                throw new Exception('Invalid request method!');
+            }
+
+            $content = isset($_POST['content']) ? $_POST['content'] : null;
+            $image = isset($_FILES['image']) ? $_FILES['image'] : null;
+            $replyToId = isset($_POST['reply_to_id']) ? ValidationHelper::integer($_POST['reply_to_id']) : null;
+
+            $validated = ValidationHelper::saveRequestByReply($content, $image, $replyToId);
+
+            if ($validated['success']) {
+                $currentDateTime = date('Y-m-d H:i:s');
+                $timeStamp = new DataTimeStamp($currentDateTime, $currentDateTime);
+
+                $imagePath = "";
+                // 画像の保存処理
+                if (!empty($image['name'])) {
+                    $imageHelper = new ImageHelper();
+                    $imagePath = $imageHelper->saveImageFile($image);
+
+                    if ($imagePath === "") throw new Exception('Failed to save image file');
+                }
+
+                // 保存するPostオブジェクトの生成
+                $post = new Post(
+                    content: $content,
+                    replyToId: $replyToId,
+                    subject: null,
+                    imagePath: $imagePath,
+                    timeStamp: $timeStamp
+                );
+
+                $postDao = new PostDaoImpl();
+                $postDao->create($post);
+                $createdPostData = $postDao->getById($post->getId());
+                $timeStamp = $createdPostData->getTimeStamp();
+
+                $validated['result'] = [
+                    'post_id' => $createdPostData->getId(),
+                    'reply_to_id' => $createdPostData->getReplyToId(),
+                    'content' => $createdPostData->getContent(),
+                    'image_path' => $createdPostData->getImagePath(),
+                    'created_at' => $timeStamp->getCreatedAt(),
+                    'updated_at' => $timeStamp->getUpdatedAt(),
+                ];
+            }
+
+            return new JSONRenderer(['response' => $validated]);
+
+        } catch(\Exception $e) {
+            $errorResponse = [
+                'success' => false,
+                'errors' => [
+                    'server' => $e->getMessage()
+                ]
+            ];
+            return new JSONRenderer(['response' => $errorResponse]);
         }
-        return new HTMLRenderer('component/update-computer-part',['part'=>$part]);
     },
     'form/update/part' => function(): HTTPRenderer {
         try {
