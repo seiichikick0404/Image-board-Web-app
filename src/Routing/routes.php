@@ -27,9 +27,15 @@ return [
         $postId = ValidationHelper::integer($_GET['id']??null);
         $postDao = new PostDAOImpl();
         $post = $postDao->getById($postId);
+
+        // リプライ取得
+        $offset = 0;
+        $limit = 10;
+        $replies = $postDao->getAllByReply($offset, $limit, $post->getId());
+
         $post->setReplyToId($postId);
 
-        return new HTMLRenderer('component/show', ['post'=>$post]);
+        return new HTMLRenderer('component/show', ['post' => $post, 'replies' => $replies]);
     },
     'form/save/post' => function(): JSONRenderer {
         try {

@@ -51,12 +51,28 @@ class PostDAOImpl implements PostDAO
     {
         $mysqli = DatabaseManager::getMysqliConnection();
 
-        $query = "SELECT * FROM posts ORDER BY created_at DESC LIMIT ?, ?";
+        // reply_to_idがNULLのものだけを選択し、作成日時の降順で並べる
+        $query = "SELECT * FROM posts WHERE reply_to_id IS NULL ORDER BY created_at DESC LIMIT ?, ?";
 
         $results = $mysqli->prepareAndFetchAll($query, 'ii', [$offset, $limit]);
 
         return $results === null ? [] : $this->resultsToPosts($results);
     }
+
+
+    public function getAllByReply(int $offset, int $limit, int $replyToId): array
+    {
+        $mysqli = DatabaseManager::getMysqliConnection();
+
+        $query = "SELECT * FROM posts WHERE reply_to_id = ? ORDER BY created_at ASC LIMIT ?, ?";
+
+        // クエリ実行時にreplyToIdもパラメータとして渡す
+        $results = $mysqli->prepareAndFetchAll($query, 'iii', [$replyToId, $offset, $limit]);
+
+        return $results === null ? [] : $this->resultsToPosts($results);
+    }
+
+
 
     public function createOrUpdate(Post $postData): bool
     {
