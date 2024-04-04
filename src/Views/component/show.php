@@ -15,17 +15,14 @@
         <div class="reply-form container-fluid">
             <form>
                 <div class="row">
-                    <div class="col-12 col-md-2 mb-3">
-                        <input type="text" class="form-control" placeholder="タイトル">
-                    </div>
-                    <div class="col-12 col-md-5 mb-3">
+                    <div class="col-12 col-md-7 mb-3">
                         <textarea class="form-control" rows="1" placeholder="内容"></textarea>
                     </div>
                     <div class="col-12 col-md-3 mb-3">
                         <input class="form-control" type="file">
                     </div>
                     <div class="col-12 col-md-2 d-flex align-items-end mb-3">
-                        <button type="submit" class="btn btn-primary w-100">投稿する</button>
+                        <button type="submit" class="btn btn-primary w-100">コメントする</button>
                     </div>
                 </div>
             </form>
@@ -34,25 +31,26 @@
         <!-- 投稿への返信を表示 -->
         <div class="reply-container">
             <div class="thread-line"></div>
-            <h4 class="reply-title">返信のタイトル</h4>
-            <p class="reply-date">返信日: 2024-03-31</p>
-            <p class="reply-content">返信の内容がここに表示されます。</p>
-            <img src="../../public/images/sample.jpeg" alt="返信画像" class="reply-image">
+            <div class="tweet-header d-flex align-items-center justify-content-between">
+                <h2 class="post-title"></h2>
+                <p class="post-date"><?php echo(htmlspecialchars($post->getTimestamp()->getCreatedAt())) ?></p>
+            </div>
+            <p class="post-content"><?php echo(htmlspecialchars($post->getContent())) ?></p>
+            <a href="../../public/storage/<?php echo(htmlspecialchars($post->getImagePath())) ?>" target="_blank">
+                <img src="../../public/storage/<?php echo(htmlspecialchars($post->getImagePath())) ?>" alt="投稿画像" class="post-image">
+            </a>
         </div>
-        <!-- 他の返信を表示 -->
+
+        <!-- 投稿への返信を表示 -->
         <div class="reply-container">
             <div class="thread-line"></div>
-            <h4 class="reply-title">返信のタイトル</h4>
-            <p class="reply-date">返信日: 2024-03-31</p>
-            <p class="reply-content">返信の内容がここに表示されます。</p>
-            <img src="../../public/images/sample.jpeg" alt="返信画像" class="reply-image">
+            <div class="tweet-header d-flex align-items-center justify-content-between">
+                <h2 class="post-title"></h2>
+                <p class="post-date"><?php echo(htmlspecialchars($post->getTimestamp()->getCreatedAt())) ?></p>
+            </div>
+            <p class="post-content"><?php echo(htmlspecialchars($post->getContent())) ?></p>
+            <a href="../../public/storage/<?php echo(htmlspecialchars($post->getImagePath())) ?>" target="_blank">
+                <!-- <img src="../../public/storage/<?php echo(htmlspecialchars($post->getImagePath())) ?>" alt="投稿画像" class="post-image"> -->
+            </a>
         </div>
-        <div class="reply-container">
-            <div class="thread-line"></div>
-            <h4 class="reply-title">返信のタイトル</h4>
-            <p class="reply-date">返信日: 2024-03-31</p>
-            <p class="reply-content">返信の内容がここに表示されます。</p>
-            <img src="../../public/images/sample.jpeg" alt="返信画像" class="reply-image">
-        </div>
-    
 </div>
