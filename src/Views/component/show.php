@@ -1,11 +1,14 @@
 <div class="container">
-    
         <!-- 投稿の詳細 -->
         <div class="post-container">
-            <h2 class="post-title">投稿のタイトル</h2>
-            <p class="post-date">投稿日: 2024-03-31</p>
-            <p class="post-content">投稿の内容がここに表示されます。</p>
-            <img src="../../public/images/sample.jpeg" alt="投稿画像" class="post-image">
+            <div class="tweet-header d-flex align-items-center justify-content-between mb-3">
+                <h2 class="post-title"><?php echo(htmlspecialchars($post->getSubject())) ?></h2>
+                <p class="post-date"><?php echo(htmlspecialchars($post->getTimestamp()->getCreatedAt())) ?></p>
+            </div>
+            <p class="post-content"><?php echo(htmlspecialchars($post->getContent())) ?></p>
+            <a href="../../public/storage/<?php echo(htmlspecialchars($post->getImagePath())) ?>" target="_blank">
+                <img src="../../public/storage/<?php echo(htmlspecialchars($post->getImagePath())) ?>" alt="投稿画像" class="post-image">
+            </a>
         </div>
 
         <!-- 返信用フォーム -->
@@ -27,8 +30,6 @@
                 </div>
             </form>
         </div>
-
-
 
         <!-- 投稿への返信を表示 -->
         <div class="reply-container">

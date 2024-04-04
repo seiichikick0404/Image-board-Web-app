@@ -25,7 +25,9 @@ return [
     },
     'posts/show' => function(): HTTPRenderer {
         $postId = ValidationHelper::integer($_GET['id']??null);
-        return new HTMLRenderer('component/show', ['item'=>""]);
+        $postDao = new PostDAOImpl();
+        $post = $postDao->getById($postId);
+        return new HTMLRenderer('component/show', ['post'=>$post]);
     },
     'form/save/post' => function(): JSONRenderer {
         try {
