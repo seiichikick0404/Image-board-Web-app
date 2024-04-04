@@ -27,7 +27,6 @@
 
     <!-- 投稿 -->
     <?php foreach ($posts as $post): ?>
-        
         <div class="tweet-item mb-5">
             <a href="show?id=<?php echo(htmlspecialchars($post->getId())) ?>" class="text-decoration-none text-dark">
                 <div class="tweet-header d-flex align-items-center justify-content-between mb-3">

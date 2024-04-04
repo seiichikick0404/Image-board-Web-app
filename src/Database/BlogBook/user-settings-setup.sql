@@ -1,8 +1,0 @@
-CREATE TABLE IF NOT EXISTS user_settings (
-    entry_id INT AUTO_INCREMENT PRIMARY KEY,
-    user_id INT NOT NULL,
-    meta_key VARCHAR(255) NOT NULL,
-    meta_value VARCHAR(255) NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES users(user_id)
-    ON DELETE CASCADE ON UPDATE CASCADE
-);
